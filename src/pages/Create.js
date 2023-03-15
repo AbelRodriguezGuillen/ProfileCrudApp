@@ -18,7 +18,11 @@ const Create = () => {
       name: "Django",
     },
     {
-      name: "Javascript",
+      name: "AWS",
+    },
+    ,
+    {
+      name: "Azure",
     },
   ];
   const navigate = useNavigate();
@@ -80,7 +84,7 @@ const Create = () => {
             onChange={(e) => setForm({ ...form, yoe: e.target.value })}
             label="Years of Experience"
             variant="outlined"
-            value={techStack}
+            value={form.yoe}
           />
           <TextField
             type="string"
