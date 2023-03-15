@@ -41,6 +41,7 @@ const Create = () => {
         console.error("Error:", error);
       });
     navigate("/employee/feed");
+    window.location.reload();
   };
 
   const { title, techStack, desc } = form;
