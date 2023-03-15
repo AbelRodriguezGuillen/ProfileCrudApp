@@ -16,11 +16,7 @@ import { useNavigate } from "react-router-dom";
 const Feed = () => {
   const [query, setQuery] = useState("");
   const [profile, setProfile] = useState([]);
-  // const [allData, setAllData] = useState([]);
   const [reactId, setReactId] = useState();
-
-  const navigate = useNavigate();
-  const [form, setForm] = useState();
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -50,38 +46,18 @@ const Feed = () => {
     };
 
     if (reactId !== null && reactId !== undefined) {
-      deleteProfile();
-      window.location.reload();
+      const confirmed = window.confirm(
+        "Are you sure you want to delete this profile?"
+      );
+      if (confirmed) {
+        deleteProfile();
+        window.location.reload();
+      }
     } else {
       fetchProfile();
     }
   }, [reactId]);
   console.log(reactId);
-
-  // const handleSubmit = (e) => {
-  //   const fetchAlldata = async () => {
-  //     const response = await axios.get(`http://localhost:8080/allPosts`);
-  //     console.log(response);
-  //     setAllData(response.data);
-  //     console.log(allData);
-  //     allData.map((p) => {
-  //       // console.log(p.id);
-  //       const deleteById = async () => {
-  //         const response = await axios.get(
-  //           `http://localhost:8080/posts` + p.id
-  //         );
-  //         console.log(response);
-  //         setId(response.data);
-  //         console.log(id);
-  //       };
-  //       // deleteById();
-  //     });
-  //     console.log(allData);
-  //   };
-  //   fetchAlldata();
-  //   console.log(fetchAlldata());
-  //   navigate("/employee/feed");
-  // };
 
   return (
     <Grid container spacing={2} sx={{ margin: "2%" }}>
