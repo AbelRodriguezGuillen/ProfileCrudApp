@@ -11,20 +11,29 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const Feed = () => {
+const Feed = (props) => {
   const [query, setQuery] = useState("");
   const [profile, setProfile] = useState([]);
   const [reactId, setReactId] = useState();
+  const [editId, setEditId] = useState();
+  // const { id } = useParams();
+  const navigate = useNavigate();
+
+  const handlePostIdChange = (id) => {
+    props.HandlePostIdChange(id);
+  };
 
   useEffect(() => {
     const fetchProfiles = async () => {
-      const response = await axios.get(`http://localhost:8080/posts/${query}`);
+      const response = await axios.get(
+        `http://localhost:8080/api/posts/search/${query}`
+      );
       setProfile(response.data);
     };
     const fetchInitialProfiles = async () => {
-      const response = await axios.get(`http://localhost:8080/allPosts`);
+      const response = await axios.get(`http://localhost:8080/api/posts`);
       console.log(response);
       setProfile(response.data);
     };
@@ -33,14 +42,17 @@ const Feed = () => {
   }, [query]);
   console.log(profile);
 
+  // DELETE BY ID
   useEffect(() => {
     const fetchProfile = async () => {
-      const response = await axios.get(`http://localhost:8080/post/${reactId}`);
+      const response = await axios.get(
+        `http://localhost:8080/api/posts/${reactId}`
+      );
       setReactId(response.data);
     };
     const deleteProfile = async () => {
       const response = await axios.delete(
-        `http://localhost:8080/post/${reactId}`
+        `http://localhost:8080/api/posts/${reactId}`
       );
       console.log(response);
     };
@@ -59,11 +71,49 @@ const Feed = () => {
   }, [reactId]);
   console.log(reactId);
 
+  // UPDATE
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/posts/${editId}`
+        );
+        setReactId(response.data);
+        console.log(editId);
+        handlePostIdChange(editId);
+      } catch (error) {
+        console.warn(error);
+        setReactId();
+      }
+    };
+    const editProfile = async () => {
+      console.log(editId);
+      navigate("/");
+      // console.log(response);
+    };
+
+    if (editId !== null && editId !== undefined) {
+      editProfile();
+      // window.location.reload();
+    } else {
+      fetchProfile();
+    }
+  }, [editId]);
+  console.log(editId);
+
   return (
     <Grid container spacing={2} sx={{ margin: "2%" }}>
       <Grid item xs={12} sx={12} md={12} lg={12}>
-        <Button sx={{ margin: "1% 2%" }} variant="outlined">
-          <Link to="/">Home</Link>
+        <Button sx={{ margin: "1% 2%" }} variant="contained">
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+            }}
+          >
+            Home
+          </Link>
         </Button>
         <Box>
           <TextField
@@ -75,7 +125,11 @@ const Feed = () => {
               ),
             }}
             placeholder="Search..."
-            sx={{ width: "75%", padding: "2% auto" }}
+            sx={{
+              width: "25%",
+              margin: "0 auto",
+              padding: "2%",
+            }}
             fullWidth
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -123,13 +177,36 @@ const Feed = () => {
                     }}
                   >
                     <Button
-                      sx={{ width: "10%", margin: "2% auto" }}
+                      sx={{
+                        width: "10%",
+                        margin: "2% auto",
+                        backgroundColor: "red",
+                      }}
                       variant="contained"
                       type="submit"
                       value={p.id}
                       onClick={(e) => setReactId(e.target.value)}
                     >
                       Delete
+                    </Button>
+                  </Box>
+                </Typography>
+                <Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Button
+                      sx={{ width: "10%", margin: "2% auto" }}
+                      variant="contained"
+                      type="submit"
+                      value={p.id}
+                      onClick={(e) => setEditId(e.target.value)}
+                    >
+                      Edit
                     </Button>
                   </Box>
                 </Typography>
