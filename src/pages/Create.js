@@ -30,7 +30,7 @@ const Create = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/post", {
+    fetch("http://localhost:8080/api/posts", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +44,7 @@ const Create = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-    navigate("/employee/feed");
+    navigate("/api/post/feed");
     window.location.reload();
   };
 
