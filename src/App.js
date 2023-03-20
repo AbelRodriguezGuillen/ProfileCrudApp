@@ -6,15 +6,7 @@ import Nav from "./pages/Nav";
 import Profile from "./pages/Profile";
 import { useNavigate } from "react-router-dom";
 
-function App(props) {
-  //   const [postId, setPostId] = useState("");
-  //   console.log(props);
-
-  //   function handlePostIdChange(props) {
-  //     setPostId(props);
-  //     console.log(props);
-  //   }
-
+function App() {
   return (
     <BrowserRouter>
       <Nav />
@@ -25,6 +17,7 @@ function App(props) {
           <Route path="/api/post/create" element={<Create />} />
         </Route>
         <Route path="/api/post/feed" element={<Feed />} />
+        <Route path="/api/posts/edit/:id" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
