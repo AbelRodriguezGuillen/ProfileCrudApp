@@ -57,7 +57,7 @@ const Create = () => {
   return (
     <Paper sx={{ padding: "2%" }} elevation={3}>
       <Typography sx={{ margin: "3% auto" }} align="center" variant="h5">
-        Create New Post
+        Create an illegal Drivers Lincense
       </Typography>
       <form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Box
