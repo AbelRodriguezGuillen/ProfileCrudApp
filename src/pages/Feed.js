@@ -10,21 +10,19 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link } from "react-router-dom";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { hasFormSubmit } from "@testing-library/user-event/dist/utils";
 
-const Feed = (props) => {
+const Feed = () => {
   const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
   const [profile, setProfile] = useState([]);
   const [reactId, setReactId] = useState();
   const [editId, setEditId] = useState();
   // const { id } = useParams();
   const navigate = useNavigate();
 
-  const handlePostIdChange = (id) => {
-    props.HandlePostIdChange(id);
-  };
-
+  // GET INITIAL PROFILES & SEARCH
   useEffect(() => {
     const fetchProfiles = async () => {
       const response = await axios.get(
@@ -38,18 +36,12 @@ const Feed = (props) => {
       setProfile(response.data);
     };
     if (query.length === 0) fetchInitialProfiles();
-    if (query.length > 2) fetchProfiles();
+    if (query.length > 0) fetchProfiles();
   }, [query]);
   console.log(profile);
 
   // DELETE BY ID
   useEffect(() => {
-    const fetchProfile = async () => {
-      const response = await axios.get(
-        `http://localhost:8080/api/posts/${reactId}`
-      );
-      setReactId(response.data);
-    };
     const deleteProfile = async () => {
       const response = await axios.delete(
         `http://localhost:8080/api/posts/${reactId}`
@@ -65,41 +57,15 @@ const Feed = (props) => {
         deleteProfile();
         window.location.reload();
       }
-    } else {
-      fetchProfile();
     }
   }, [reactId]);
   console.log(reactId);
 
   // UPDATE
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/posts/${editId}`
-        );
-        setReactId(response.data);
-        console.log(editId);
-        handlePostIdChange(editId);
-      } catch (error) {
-        console.warn(error);
-        setReactId();
-      }
-    };
-    const editProfile = async () => {
-      console.log(editId);
-      navigate("/");
-      // console.log(response);
-    };
-
-    if (editId !== null && editId !== undefined) {
-      editProfile();
-      // window.location.reload();
-    } else {
-      fetchProfile();
-    }
-  }, [editId]);
-  console.log(editId);
+  const handleEditClick = (id) => {
+    // Navigate to the edit page with the given ID
+    navigate(`/api/posts/edit/${id}`);
+  };
 
   return (
     <Grid container spacing={2} sx={{ margin: "2%" }}>
@@ -133,6 +99,9 @@ const Feed = (props) => {
             fullWidth
             onChange={(e) => setQuery(e.target.value)}
           />
+          {results.map((result) => (
+            <div key={result.id}>{result.title}</div>
+          ))}
         </Box>
       </Grid>
       {profile &&
@@ -164,7 +133,7 @@ const Feed = (props) => {
                 {p.techStack.map((s, i) => {
                   return (
                     <Typography variant="body" gutterBottom key={i}>
-                      {s} .{` `}
+                      {i === p.techStack.length - 1 ? s : s + ", "}
                     </Typography>
                   );
                 })}
@@ -204,7 +173,7 @@ const Feed = (props) => {
                       variant="contained"
                       type="submit"
                       value={p.id}
-                      onClick={(e) => setEditId(e.target.value)}
+                      onClick={() => handleEditClick(p.id)}
                     >
                       Edit
                     </Button>
