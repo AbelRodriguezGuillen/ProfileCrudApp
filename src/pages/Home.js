@@ -6,9 +6,6 @@ import "../App.css";
 const Home = () => {
   return (
     <div>
-      {/* <Typography sx={{ margin: "5%" }} variant="h3" align="center">
-        Profile Search & Creator
-      </Typography> */}
       <div>
         <ul className="ul">
           <li>
