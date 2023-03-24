@@ -2,11 +2,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
+import background from "/Users/abelrodriguez/Desktop/ProfileCrudApp/src/assets/images/DJ-004.jpg";
 
 const Nav = () => {
   return (
     <div>
-      <nav>
+      <style>
+        {`.jquery-ripples {
+          position: relative;
+          z-index: 0;
+        }`}
+      </style>
+      <nav
+        style={{
+          backgroundImage: `url("${background}")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          height: "80px",
+        }}
+      >
         <h5>
           <Link
             to="/"
